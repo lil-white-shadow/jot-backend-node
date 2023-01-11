@@ -58,7 +58,22 @@ app.post('/api/new-event',jsonParser, function(req, res) {
   res.send("Event added");
 });
 
+// update RSVP info for an event by id
+app.patch("/api/events/:eventId", (req, res) => {
+  const id = req.params.eventId;
+  
+  const eventAttendees = req.body.eventAttendees;
+  const eventSpecialGuests = req.body.eventSpecialGuests;
+  const eventNonAttendees = req.body.eventNonAttendees;
 
+  const targetEvent = events.filter(event => event.eventId === id)[0];
+
+  targetEvent.eventAttendees = eventAttendees;
+  targetEvent.eventSpecialGuests = eventSpecialGuests;
+  targetEvent.eventNonAttendees = eventNonAttendees;
+  
+  res.send("Event updated")
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
