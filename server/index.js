@@ -14,9 +14,13 @@ const jsonParser = bodyParser.json()
 
 let events = [];
 
-app.get("/api", (req, res) => {
+app.get("/api/events", (req, res) => {
+  res.send(events)
+});
 
-  res.json({message: 'Hola from server!'});
+app.get("/api/events/:eventId", (req, res) => {
+  const id = req.params.eventId;
+  res.send(events.filter(event => event.eventId === id))
 });
 
 app.post('/api/new-event',jsonParser, function(req, res) {
