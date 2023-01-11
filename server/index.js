@@ -23,6 +23,10 @@ app.get("/api/events/:eventId", (req, res) => {
   res.send(events.filter(event => event.eventId === id))
 });
 
+app.get("/api/ids/", (req, res) => {
+  res.send(events.map(event => event.eventId))
+});
+
 app.post('/api/new-event',jsonParser, function(req, res) {
   const eventId = req.body.eventId;
   const eventDate = req.body.eventDate;
