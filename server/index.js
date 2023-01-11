@@ -32,6 +32,8 @@ app.get("/api/ids/", (req, res) => {
 
 // post new event
 app.post('/api/new-event',jsonParser, function(req, res) {
+  console.log(events.length + 1);
+
   const eventId = req.body.eventId;
   const eventDate = req.body.eventDate;
   const eventName = req.body.eventName;
@@ -43,19 +45,39 @@ app.post('/api/new-event',jsonParser, function(req, res) {
   const eventSpecialGuests = req.body.eventSpecialGuests;
   const eventNonAttendees = req.body.eventNonAttendees;
   
-  events = [...events, {
-    "eventId": eventId,
-    "eventDate": eventDate,
-    "eventName": eventName,
-    "eventStartTime": eventStartTime,
-    "eventEndTime": eventEndTime,
-    "eventLocation": eventLocation,
-    "eventOrganizer": eventOrganizer,
-    "eventAttendees": eventAttendees,
-    "eventSpecialGuests": eventSpecialGuests,
-    "eventNonAttendees": eventNonAttendees
-  }]
-  res.send("Event added");
+  if(events.length < 100) {
+  
+    events = [...events, {
+      "eventId": eventId,
+      "eventDate": eventDate,
+      "eventName": eventName,
+      "eventStartTime": eventStartTime,
+      "eventEndTime": eventEndTime,
+      "eventLocation": eventLocation,
+      "eventOrganizer": eventOrganizer,
+      "eventAttendees": eventAttendees,
+      "eventSpecialGuests": eventSpecialGuests,
+      "eventNonAttendees": eventNonAttendees
+    }]
+    res.send("Event added");
+
+  } else {
+    events[0] = {
+
+      "eventId": eventId,
+      "eventDate": eventDate,
+      "eventName": eventName,
+      "eventStartTime": eventStartTime,
+      "eventEndTime": eventEndTime,
+      "eventLocation": eventLocation,
+      "eventOrganizer": eventOrganizer,
+      "eventAttendees": eventAttendees,
+      "eventSpecialGuests": eventSpecialGuests,
+      "eventNonAttendees": eventNonAttendees
+    }
+    res.send("Events is at capacity, now replacing an older event.");
+  }
+
 });
 
 // update RSVP info for an event by id
