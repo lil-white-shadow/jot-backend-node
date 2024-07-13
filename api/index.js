@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // create application/json parser
 const jsonParser = bodyParser.json();
@@ -26,44 +26,44 @@ function getEventsFromDB() {
 app.get("/api/ids/", (req, res) => {
 
   client.connect()
-  .then(() => getEventsFromDB())
-  .then(events => res.send(events.map(events => events.eventId)))
+    .then(() => getEventsFromDB())
+    .then(events => res.send(events.map(events => events.eventId)))
 })
 
 // get an event by id
 app.get("/api/events/:eventId", (req, res) => {
 
   getEventsFromDB()
-  .then(events => res.send(events.filter(event => event.eventId === req.params.eventId)))
+    .then(events => res.send(events.filter(event => event.eventId === req.params.eventId)))
 });
 
 // post new event
-app.post('/api/new-event',jsonParser, function(req, res) {
+app.post('/api/new-event', jsonParser, function (req, res) {
 
   client.connect()
-  .then(() => {
-    client.db('jot_database').collection('events').insertOne({
-      "eventId": req.body.eventId,
-      "eventDate": req.body.eventDate,
-      "eventName": req.body.eventName,
-      "eventStartTime": req.body.eventStartTime,
-      "eventEndTime": req.body.eventEndTime,
-    "eventLocation": req.body.eventLocation,
-    "eventOrganizer": req.body.eventOrganizer,
-    "eventAttendees": req.body.eventAttendees,
-    "eventSpecialGuests": req.body.eventSpecialGuests,
-    "eventNonAttendees": req.body.eventNonAttendees
+    .then(() => {
+      client.db('jot_database').collection('events').insertOne({
+        "eventId": req.body.eventId,
+        "eventDate": req.body.eventDate,
+        "eventName": req.body.eventName,
+        "eventStartTime": req.body.eventStartTime,
+        "eventEndTime": req.body.eventEndTime,
+        "eventLocation": req.body.eventLocation,
+        "eventOrganizer": req.body.eventOrganizer,
+        "eventAttendees": req.body.eventAttendees,
+        "eventSpecialGuests": req.body.eventSpecialGuests,
+        "eventNonAttendees": req.body.eventNonAttendees
+      })
     })
-  })
-  .then(() => {
-    res.send("Event added");
-  })
+    .then(() => {
+      res.send("Event added");
+    })
 });
 
 // update RSVP info for an event by id
 app.patch("/api/events/:eventId", (req, res) => {
 
-  const query = {eventId: req.params.eventId}
+  const query = { eventId: req.params.eventId }
   const updates = {
     $set: {
       eventAttendees: req.body.eventAttendees,
@@ -73,15 +73,17 @@ app.patch("/api/events/:eventId", (req, res) => {
   }
 
   client.connect()
-  .then(() => {
-    client.db('jot_database').collection('events').updateOne(query, updates)
-  })
-  .then(() => {
-    res.send("Event updated");
-  })
+    .then(() => {
+      client.db('jot_database').collection('events').updateOne(query, updates)
+    })
+    .then(() => {
+      res.send("Event updated");
+    })
 
 });
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+
+module.exports = app;
