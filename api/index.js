@@ -14,7 +14,8 @@ const jsonParser = bodyParser.json();
 
 // mongodb setup info
 const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb+srv://kru:krutarth@cluster0.tchyzxp.mongodb.net/?retryWrites=true&w=majority';
+const passkey = process.env.mongo_passkey;
+const url = 'mongodb+srv://kru:' + passkey +'@cluster0.tchyzxp.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(url);
 
 // Connect with mongodb client before running below function to retrieve events from db
